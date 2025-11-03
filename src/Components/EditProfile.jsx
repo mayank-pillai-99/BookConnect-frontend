@@ -11,13 +11,14 @@ const EditProfile = ({ user }) => {
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
   const [age, setAge] = useState(user.age || "");
   const [gender, setGender] = useState(user.gender || "");
+  const [books,setBooks]=useState(user.books || "");
+  const [newBook,setNewBook]=useState("");
   const [about, setAbout] = useState(user.about || "");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const [showToast, setShowToast] = useState(false);
 
   const saveProfile = async () => {
-    //Clear Errors
     setError("");
     try {
       const res = await axios.patch(
@@ -28,7 +29,7 @@ const EditProfile = ({ user }) => {
           photoUrl,
           age,
           gender,
-          about,
+          about
         },
         { withCredentials: true }
       );
@@ -41,6 +42,27 @@ const EditProfile = ({ user }) => {
       setError(err.response.data);
     }
   };
+  const saveBooks = async () => {
+    setError("");
+    try {
+      books.push(newBook)
+      const res = await axios.patch(
+        BASE_URL + "/profile/edit/books",
+        {
+          books
+        },
+        { withCredentials: true }
+      );
+      dispatch(addUser(res?.data?.data));
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } catch (err) {
+      setError(err.response.data);
+    }
+  };
+
 
   return (
     <>
@@ -116,18 +138,36 @@ const EditProfile = ({ user }) => {
                     onChange={(e) => setAbout(e.target.value)}
                   />
                 </label>
+                <label className="form-control w-full max-w-xs my-2">
+                  <div className="label">
+                    <span className="label-text">Books:</span>
+                  </div>
+                  <input
+                    type="text"
+                    value={newBook}
+                    className="input input-bordered w-full max-w-xs"
+                    onChange={(e) => setNewBook(e.target.value)}
+                  />
+                </label>
               </div>
               <p className="text-red-500">{error}</p>
-              <div className="card-actions justify-center m-2">
-                <button className="btn btn-primary" onClick={saveProfile}>
-                  Save Profile
-                </button>
-              </div>
+              <div className="flex justify-center">
+                <div className="card-actions justify-center m-2">
+                  <button className="btn btn-primary" onClick={saveProfile}>
+                    Save Profile
+                  </button>
+                </div>
+                <div className="card-actions justify-center m-2">
+                  <button className="btn btn-primary" onClick={saveBooks}>
+                    Save Books
+                  </button>
+                </div>
+              </div>        
             </div>
           </div>
         </div>
         <UserCard
-          user={{ firstName, lastName, photoUrl, age, gender, about }}
+          user={{ firstName, lastName, photoUrl, age, gender, about ,books}}
         />
       </div>
       {showToast && (

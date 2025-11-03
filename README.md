@@ -1,4 +1,4 @@
-# DevTinder
+# BookConnect
 
 - Create a Vite + React application
 - Remove unecessary code and create a Hello World app
@@ -43,24 +43,24 @@ Body
     Route=/connetions => Connections
     Router=/profile => Profile
 =======
-**devTinder** is a MERN stack application where developers can create profiles, send connection requests, and connect with each other, similar to a networking platform. This repository contains the frontend for devTinder.
+**BookConnect** is a MERN stack application where book lovers can create profiles, send connection requests, and connect with each other, similar to a networking platform for readers. This repository contains the frontend for BookConnect.
 
 ## 🛠 Tech Stack
 
 -  **Frontend:** React.js, Vite, Redux Toolkit, Tailwind CSS
 -  **State Management:** Redux Toolkit
--  **Backend:** [devTinder Backend](https://github.com/akshadjaiswal/devTinder-backend)
+-  **Backend:** [BookConnect Backend](https://github.com/akshadjaiswal/bookconnect-backend)
 -  **Authentication:** JWT
 -  **Database:** MongoDB (via backend)
 
 ## 📌 Features
 
-- 🏠 **Developer Profiles** - Create and customize your profile.
-- 🤝 **Connect with Developers** - Send and accept connection requests.
+- 🏠 **Reader Profiles** - Create and customize your profile.
+- 🤝 **Connect with Readers** - Send and accept connection requests.
 - 🔒 **Authentication** - Secure login & signup using JWT.
-- 👀 **View Profiles** - Browse other developer profiles.
-- ✏️ **Edit Profile** - Update personal details, skills, and bio.
-- 📩 **Send Connection Requests** - Request to connect with other developers.
+- 👀 **View Profiles** - Browse other reader profiles.
+- ✏️ **Edit Profile** - Update personal details, favorite genres, and bio.
+- 📩 **Send Connection Requests** - Request to connect with other book lovers.
 - ✅ **Review Connection Requests** - Accept or reject incoming connection requests.
 - 🌍 **Responsive Design** - Fully optimized for mobile & desktop.
 

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user }) => {
-  const { _id, firstName, lastName, photoUrl, age, gender, about } = user;
+  const { _id, firstName, lastName, photoUrl, age, gender, about,books} = user;
   const dispatch = useDispatch();
 
   const handleSendRequest = async (status, userId) => {
@@ -27,6 +27,11 @@ const UserCard = ({ user }) => {
         <h2 className="card-title">{firstName + " " + lastName}</h2>
         {age && gender && <p>{age + ", " + gender}</p>}
         <p>{about}</p>
+        {
+          books && books.length>0 && <p>Books that {firstName} is interested in</p> && books.map((book)=>{
+            return <p>{book}</p>
+          })
+        }
         <div className="card-actions justify-center my-4">
           <button
             className="btn btn-primary"
