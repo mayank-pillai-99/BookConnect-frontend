@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import PulsatingDots from "./PulsatingDots";
 
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -12,10 +13,13 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setError("");
+    setLoading(true);
     try {
       const res = await axios.post(
         BASE_URL + "/login",
@@ -29,10 +33,14 @@ const Login = () => {
       return navigate("/");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSignUp = async () => {
+    setError("");
+    setLoading(true);
     try {
       const res = await axios.post(
         BASE_URL + "/signup",
@@ -43,6 +51,8 @@ const Login = () => {
       return navigate("/profile");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,8 +118,13 @@ const Login = () => {
             <button
               className="btn btn-primary"
               onClick={isLoginForm ? handleLogin : handleSignUp}
+              disabled={loading}
             >
-              {isLoginForm ? "Login" : "Sign Up"}
+              {loading ? (
+                <PulsatingDots />
+              ) : (
+                isLoginForm ? "Login" : "Sign Up"
+              )}
             </button>
           </div>
 

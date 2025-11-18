@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserCard from "./UserCard";
 import FeedFilters from "./FeedFilters";
+import PulsatingDots from "./PulsatingDots";
 import { getFeed as fetchFeed } from "../utils/bookService";
 
 const Feed = () => {
@@ -73,7 +74,7 @@ const Feed = () => {
   if (loading && !feed) {
     return (
       <div className="flex justify-center items-center my-20">
-        <span className="loading loading-spinner loading-lg"></span>
+        <PulsatingDots />
       </div>
     );
   }
@@ -94,7 +95,7 @@ const Feed = () => {
 
       {loading ? (
         <div className="flex justify-center items-center py-20">
-          <span className="loading loading-spinner loading-lg"></span>
+          <PulsatingDots />
         </div>
       ) : feed && feed.length > 0 ? (
         <div className="flex justify-center">
