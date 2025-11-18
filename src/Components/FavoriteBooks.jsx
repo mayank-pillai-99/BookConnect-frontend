@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { BookOpen, Plus, X, Check, AlertCircle, Sparkles, User2 } from "lucide-react";
 import { addFavoriteBook, removeFavoriteBook } from "../utils/bookService";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
@@ -26,7 +28,6 @@ const FavoriteBooks = ({ user }) => {
       return;
     }
 
-    // Check for duplicates
     const isDuplicate = favoriteBooks.some(
       book => book.title.toLowerCase() === title.toLowerCase()
     );
@@ -42,9 +43,6 @@ const FavoriteBooks = ({ user }) => {
 
     try {
       const response = await addFavoriteBook(title.trim(), author.trim());
-      console.log("Add book response:", response);
-      
-      // The response might be nested as response.data or just response
       const userData = response.data || response;
       
       if (userData) {
@@ -75,8 +73,6 @@ const FavoriteBooks = ({ user }) => {
 
     try {
       const response = await removeFavoriteBook(bookId);
-      console.log("Remove book response:", response);
-      
       const userData = response.data || response;
       
       if (userData) {
@@ -93,104 +89,228 @@ const FavoriteBooks = ({ user }) => {
   };
 
   return (
-    <div className="card bg-base-200 shadow-xl p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="card-title text-2xl">📚 Favorite Books</h2>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => setShowAddForm(!showAddForm)}
-        >
-          {showAddForm ? "Cancel" : "+ Add Book"}
-        </button>
-      </div>
-
-      {error && (
-        <div className="alert alert-error mb-4">
-          <span>{error}</span>
-        </div>
-      )}
-
-      {success && (
-        <div className="alert alert-success mb-4">
-          <span>{success}</span>
-        </div>
-      )}
-
-      {showAddForm && (
-        <form onSubmit={handleAddBook} className="mb-6 p-4 bg-base-300 rounded-lg">
-          <div className="form-control mb-3">
-            <label className="label">
-              <span className="label-text">Book Title *</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter book title"
-              className="input input-bordered w-full"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-control mb-3">
-            <label className="label">
-              <span className="label-text">Author</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter author name (optional)"
-              className="input input-bordered w-full"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              disabled={loading}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
-            disabled={loading}
-          >
-            {loading ? "Adding..." : "Add Book"}
-          </button>
-        </form>
-      )}
-
-      <div className="space-y-3">
-        {favoriteBooks.length === 0 ? (
-          <div className="text-center py-8 text-base-content/60">
-            <p>No favorite books yet. Add your first book!</p>
-          </div>
-        ) : (
-          favoriteBooks.map((book) => (
-            <div
-              key={book._id}
-              className="flex items-center justify-between p-4 bg-base-300 rounded-lg hover:bg-base-100 transition"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="relative"
+    >
+      <div className="bg-base-200/80 backdrop-blur-md rounded-2xl shadow-xl border border-primary/20 overflow-hidden">
+        {/* Animated gradient border */}
+        <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
+        
+        <div className="p-6">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <motion.div 
+              className="flex items-center gap-3"
+              whileHover={{ scale: 1.02 }}
             >
-              <div className="flex-1">
-                <h3 className="font-semibold text-lg">{book.title}</h3>
-                {book.author && (
-                  <p className="text-sm text-base-content/70">by {book.author}</p>
-                )}
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <BookOpen className="h-6 w-6 text-primary" />
               </div>
-              <button
-                className="btn btn-ghost btn-sm btn-circle text-error"
-                onClick={() => handleRemoveBook(book._id, book.title)}
-                title="Remove book"
+              <div>
+                <h2 className="text-2xl font-bold">Favorite Books</h2>
+                <p className="text-sm text-base-content/60">
+                  {favoriteBooks.length} book{favoriteBooks.length !== 1 ? "s" : ""} in your collection
+                </p>
+              </div>
+            </motion.div>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`btn ${showAddForm ? "btn-ghost" : "btn-primary"} btn-sm gap-2`}
+              onClick={() => setShowAddForm(!showAddForm)}
+            >
+              {showAddForm ? (
+                <>
+                  <X className="h-4 w-4" />
+                  Cancel
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4" />
+                  Add Book
+                </>
+              )}
+            </motion.button>
+          </div>
+
+          {/* Alerts */}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="alert alert-error mb-4"
               >
-                ✕
-              </button>
-            </div>
-          ))
-        )}
+                <AlertCircle className="h-5 w-5" />
+                <span>{error}</span>
+              </motion.div>
+            )}
+
+            {success && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="alert alert-success mb-4"
+              >
+                <Check className="h-5 w-5" />
+                <span>{success}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Add Form */}
+          <AnimatePresence>
+            {showAddForm && (
+              <motion.form
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                onSubmit={handleAddBook}
+                className="mb-6 p-4 bg-base-300/50 rounded-xl border border-primary/10"
+              >
+                <div className="space-y-4">
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-semibold flex items-center gap-2">
+                        <BookOpen className="h-4 w-4 text-primary" />
+                        Book Title *
+                      </span>
+                    </label>
+                    <motion.input
+                      whileFocus={{ scale: 1.01 }}
+                      type="text"
+                      placeholder="Enter book title"
+                      className="input input-bordered w-full focus:input-primary transition-all duration-300"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      disabled={loading}
+                    />
+                  </div>
+
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-semibold flex items-center gap-2">
+                        <User2 className="h-4 w-4 text-primary" />
+                        Author
+                      </span>
+                    </label>
+                    <motion.input
+                      whileFocus={{ scale: 1.01 }}
+                      type="text"
+                      placeholder="Enter author name (optional)"
+                      className="input input-bordered w-full focus:input-primary transition-all duration-300"
+                      value={author}
+                      onChange={(e) => setAuthor(e.target.value)}
+                      disabled={loading}
+                    />
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    className="btn btn-primary w-full gap-2"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Adding...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" />
+                        Add Book
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </motion.form>
+            )}
+          </AnimatePresence>
+
+          {/* Books List */}
+          <div className="space-y-3">
+            {favoriteBooks.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-12"
+              >
+                <div className="flex justify-center mb-4">
+                  <div className="p-4 bg-base-300/50 rounded-full">
+                    <BookOpen className="h-12 w-12 text-base-content/30" />
+                  </div>
+                </div>
+                <p className="text-base-content/60 mb-2">No favorite books yet</p>
+                <p className="text-sm text-base-content/40">Add your first book to get started!</p>
+              </motion.div>
+            ) : (
+              <AnimatePresence>
+                {favoriteBooks.map((book, index) => (
+                  <motion.div
+                    key={book._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="group flex items-center justify-between p-4 bg-base-300/50 rounded-xl border border-transparent hover:border-primary/30 transition-all duration-300"
+                  >
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        <BookOpen className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg">{book.title}</h3>
+                        {book.author && (
+                          <p className="text-sm text-base-content/70 flex items-center gap-1">
+                            <User2 className="h-3 w-3" />
+                            {book.author}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="btn btn-ghost btn-sm btn-circle text-error opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => handleRemoveBook(book._id, book.title)}
+                      title="Remove book"
+                    >
+                      <X className="h-4 w-4" />
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            )}
+          </div>
+        </div>
       </div>
 
-      {favoriteBooks.length > 0 && (
-        <div className="mt-4 text-sm text-base-content/60 text-center">
-          {favoriteBooks.length} book{favoriteBooks.length !== 1 ? "s" : ""} in your collection
-        </div>
-      )}
-    </div>
+      {/* Animations */}
+      <style jsx>{`
+        .animate-energy-flow {
+          animation: energy-flow 4s linear infinite;
+          background-size: 200% 100%;
+        }
+        @keyframes energy-flow {
+          0% {
+            background-position: -100% 0;
+          }
+          100% {
+            background-position: 100% 0;
+          }
+        }
+      `}</style>
+    </motion.div>
   );
 };
 

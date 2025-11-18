@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { X, Heart, BookOpen, Sparkles, MapPin, Calendar } from "lucide-react";
+import { X, Heart, BookOpen, Sparkles, MapPin, Calendar ,User} from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
@@ -144,7 +144,7 @@ const UserCard = ({ user, showActions = false }) => {
             
             {gender && (
               <p className="text-sm text-base-content/70 flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
+                <User className="h-4 w-4" />
                 {gender}
               </p>
             )}

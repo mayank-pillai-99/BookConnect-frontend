@@ -52,7 +52,7 @@ const EditProfile = ({ user }) => {
     { label: "Last Name", value: lastName, setter: setLastName, icon: User, type: "text" },
     { label: "Photo URL", value: photoUrl, setter: setPhotoUrl, icon: Image, type: "text" },
     { label: "Age", value: age, setter: setAge, icon: Calendar, type: "number" },
-    { label: "Gender", value: gender, setter: setGender, icon: MapPin, type: "text" },
+    { label: "Gender", value: gender, setter: setGender, icon: User, type: "text" },
   ];
 
   return (
