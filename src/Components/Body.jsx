@@ -38,9 +38,9 @@ const Body = () => {
   }, [user, location.pathname]);
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="pt-20">
+      <div className="pt-20 flex-grow">
         <Outlet />
       </div>
       <Footer />
