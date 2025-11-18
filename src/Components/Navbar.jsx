@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, easeInOut } from 'framer-motion';
-import { Menu, X, ArrowRight, BookOpen, Search, User, Users, Mail, LogOut } from 'lucide-react';
+import { Menu, X, ArrowRight, BookOpen, User, Users, Mail, LogOut } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -36,12 +36,14 @@ const NavBar = () => {
 
   const navItems = user
     ? [
-        { name: 'Feed', href: '/', icon: BookOpen },
+        { name: 'Feed', href: '/feed', icon: BookOpen },
         { name: 'Profile', href: '/profile', icon: User },
         { name: 'Connections', href: '/connections', icon: Users },
         { name: 'Requests', href: '/requests', icon: Mail },
       ]
-    : [];
+    : [
+        { name: 'Home', href: '/', icon: BookOpen },
+      ];
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -106,7 +108,7 @@ const NavBar = () => {
               whileHover={{ scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             >
-              <Link to="/" className="flex items-center space-x-3">
+              <Link to={user ? "/feed" : "/"} className="flex items-center space-x-3">
                 <div className="relative">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary via-primary to-primary-focus shadow-lg">
                     <BookOpen className="h-6 w-6 text-primary-content" />
@@ -200,6 +202,7 @@ const NavBar = () => {
                 <>
                   <Link
                     to="/login"
+                    state={{ isSignup: false }}
                     className="text-base-content/80 hover:text-base-content px-4 py-2 text-sm font-medium transition-colors duration-200"
                   >
                     Sign In
@@ -210,6 +213,7 @@ const NavBar = () => {
                   >
                     <Link
                       to="/login"
+                      state={{ isSignup: true }}
                       className="btn btn-primary btn-sm inline-flex items-center space-x-2 shadow-lg"
                     >
                       <span>Get Started</span>
@@ -318,6 +322,7 @@ const NavBar = () => {
                   >
                     <Link
                       to="/login"
+                      state={{ isSignup: false }}
                       className="btn btn-ghost w-full"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -325,6 +330,7 @@ const NavBar = () => {
                     </Link>
                     <Link
                       to="/login"
+                      state={{ isSignup: true }}
                       className="btn btn-primary w-full"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >

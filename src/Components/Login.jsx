@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import PulsatingDots from "./PulsatingDots";
 
 const Login = () => {
+  const location = useLocation();
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [isLoginForm, setIsLoginForm] = useState(true);
+  // Check if we should show signup form based on navigation state
+  const [isLoginForm, setIsLoginForm] = useState(
+    location.state?.isSignup === true ? false : true
+  );
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((store) => store.user);
+
+  // If user is already logged in, redirect to feed
+  useEffect(() => {
+    if (user) {
+      navigate("/feed", { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleLogin = async () => {
     setError("");
@@ -30,7 +42,7 @@ const Login = () => {
         { withCredentials: true }
       );
       dispatch(addUser(res.data));
-      return navigate("/");
+      return navigate("/feed");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong");
     } finally {

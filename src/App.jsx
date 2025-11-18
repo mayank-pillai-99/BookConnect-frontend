@@ -8,6 +8,8 @@ import Feed from "./Components/Feed";
 import Connections from "./Components/Connections";
 import Requests from "./Components/Requests";
 import Chat from "./Components/Chat";
+import Landing from "./Components/Landing";
+import ProtectedRoute from "./Components/ProtectedRoute";
 
 function App() {
   return (
@@ -16,12 +18,13 @@ function App() {
         <BrowserRouter basename="/">
           <Routes>
             <Route path="/" element={<Body />}>
-              <Route path="/" element={<Feed />} />
+              <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/connections" element={<Connections />} />
-              <Route path="/requests" element={<Requests />} />
-              <Route path="/chat/:targetUserId" element={<Chat />} />
+              <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
+              <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
+              <Route path="/chat/:targetUserId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

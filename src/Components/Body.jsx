@@ -31,8 +31,9 @@ const Body = () => {
   };
 
   useEffect(() => {
-    // Only fetch user if we're not on the login page and no user is logged in
-    if (!user && location.pathname !== "/login") {
+    // Only fetch user if we're not on public pages (landing, login) and no user is logged in
+    const publicPages = ["/", "/login"];
+    if (!user && !publicPages.includes(location.pathname)) {
       fetchUser();
     }
   }, [user, location.pathname]);
