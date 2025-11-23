@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addFeed } from "../utils/feedSlice";
-import { useEffect, useState } from "react";
+import { addFeed, clearFeed } from "../utils/feedSlice";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserCard from "./UserCard";
 import FeedFilters from "./FeedFilters";
@@ -22,46 +22,77 @@ const Feed = () => {
     page: 1
   });
 
-  const loadFeed = async () => {
-    setLoading(true);
-    setError("");
-    
-    try {
-      const response = await fetchFeed(filters.page, 10, {
-        search: filters.search,
-        genre: filters.genre,
-        book: filters.book,
-        sort: filters.sort
-      });
-      dispatch(addFeed(response?.data));
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to load feed");
-      console.error("Feed error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const loadingRef = useRef(false);
+  const prevFilterKeyRef = useRef(null);
 
+  // Load initial feed
   useEffect(() => {
-    loadFeed();
-  }, [filters]);
+    loadFeed(1, filters.search, filters.genre, filters.book, filters.sort);
+  }, []);
 
-  // Update URL params when filters change
+  // Reload when filters change
+  useEffect(() => {
+    const filterKey = `${filters.search}|${filters.genre}|${filters.book}|${filters.sort}`;
+    
+    if (filterKey !== prevFilterKeyRef.current) {
+      prevFilterKeyRef.current = filterKey;
+      dispatch(clearFeed());
+      (async () => {
+        if (loadingRef.current) return;
+        
+        loadingRef.current = true;
+        setLoading(true);
+        setError("");
+        
+        try {
+          const response = await fetchFeed(1, 10, { 
+            search: filters.search, 
+            genre: filters.genre, 
+            book: filters.book, 
+            sort: filters.sort 
+          });
+          const data = response?.data || response || [];
+          dispatch(addFeed(Array.isArray(data) ? data : []));
+        } catch (err) {
+          setError(err?.response?.data?.message || "Failed to load feed");
+          console.error("Feed error:", err);
+        } finally {
+          setLoading(false);
+          loadingRef.current = false;
+        }
+      })();
+    }
+  }, [filters.search, filters.genre, filters.book, filters.sort, dispatch]);
+
+  // Auto-load next page when feed is low
+  useEffect(() => {
+    if (feed && feed.length > 0 && feed.length <= 2 && !loading) {
+      loadFeed(filters.page + 1, filters.search, filters.genre, filters.book, filters.sort);
+      setFilters(prev => ({ ...prev, page: prev.page + 1 }));
+    }
+  }, [feed, loading]);
+
+  // Update URL params
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.search) params.set("search", filters.search);
     if (filters.genre) params.set("genre", filters.genre);
     if (filters.book) params.set("book", filters.book);
     if (filters.sort) params.set("sort", filters.sort);
-    
     setSearchParams(params);
-  }, [filters]);
+  }, [filters.search, filters.genre, filters.book, filters.sort, setSearchParams]);
 
   const handleFiltersChange = (newFilters) => {
-    setFilters(newFilters);
+    dispatch(clearFeed());
+    setFilters({
+      ...newFilters,
+      page: 1
+    });
   };
 
   const handleClearFilters = () => {
+    dispatch(clearFeed());
+    prevFilterKeyRef.current = null;
     setFilters({
       search: "",
       genre: "",
@@ -71,7 +102,7 @@ const Feed = () => {
     });
   };
 
-  if (loading && !feed) {
+  if (loading && (!feed || feed.length === 0)) {
     return (
       <div className="flex justify-center items-center my-20">
         <PulsatingDots />
@@ -93,13 +124,9 @@ const Feed = () => {
         </div>
       )}
 
-      {loading ? (
-        <div className="flex justify-center items-center py-20">
-          <PulsatingDots />
-        </div>
-      ) : feed && feed.length > 0 ? (
+      {feed && feed.length > 0 ? (
         <div className="flex justify-center">
-          <UserCard user={feed[0]} showActions={true} />
+          <UserCard key={feed[0]._id} user={feed[0]} showActions={true} />
         </div>
       ) : (
         <div className="text-center py-20">

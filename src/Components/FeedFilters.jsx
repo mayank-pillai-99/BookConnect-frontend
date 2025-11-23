@@ -8,27 +8,49 @@ const FeedFilters = ({ filters, onFiltersChange, onClearFilters }) => {
   const [localBook, setLocalBook] = useState(filters.book || "");
   const [showFilters, setShowFilters] = useState(false);
 
+  // Sync local search state with parent
+  useEffect(() => {
+    setLocalSearch(filters.search || "");
+  }, [filters.search]);
+
+  // Sync local book state with parent
+  useEffect(() => {
+    setLocalBook(filters.book || "");
+  }, [filters.book]);
+
   // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
       if (localSearch !== filters.search) {
-        onFiltersChange({ ...filters, search: localSearch, page: 1 });
+        onFiltersChange({ 
+          search: localSearch, 
+          genre: filters.genre,
+          book: filters.book,
+          sort: filters.sort,
+          page: 1 
+        });
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [localSearch]);
+  }, [localSearch, filters.genre, filters.book, filters.sort]);
 
   // Debounce book filter
   useEffect(() => {
     const timer = setTimeout(() => {
       if (localBook !== filters.book) {
-        onFiltersChange({ ...filters, book: localBook, page: 1 });
+        onFiltersChange({ 
+          search: filters.search,
+          genre: filters.genre,
+          book: localBook,
+          sort: filters.sort,
+          page: 1 
+        });
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [localBook]);
+  }, [localBook, filters.search, filters.genre, filters.sort]);
 
   const handleGenreChange = (e) => {
     onFiltersChange({ ...filters, genre: e.target.value, page: 1 });
