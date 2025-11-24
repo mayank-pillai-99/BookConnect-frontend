@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed, clearFeed } from "../utils/feedSlice";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserCard from "./UserCard";
 import FeedFilters from "./FeedFilters";
@@ -25,10 +25,31 @@ const Feed = () => {
   const loadingRef = useRef(false);
   const prevFilterKeyRef = useRef(null);
 
+  // Load feed function
+  const loadFeed = useCallback(async (page, search, genre, book, sort) => {
+    if (loadingRef.current) return;
+    
+    loadingRef.current = true;
+    setLoading(true);
+    setError("");
+    
+    try {
+      const response = await fetchFeed(page, 10, { search, genre, book, sort });
+      const data = response?.data || response || [];
+      dispatch(addFeed(Array.isArray(data) ? data : []));
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to load feed");
+      console.error("Feed error:", err);
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  }, [dispatch]);
+
   // Load initial feed
   useEffect(() => {
     loadFeed(1, filters.search, filters.genre, filters.book, filters.sort);
-  }, []);
+  }, [loadFeed]);
 
   // Reload when filters change
   useEffect(() => {
@@ -37,40 +58,18 @@ const Feed = () => {
     if (filterKey !== prevFilterKeyRef.current) {
       prevFilterKeyRef.current = filterKey;
       dispatch(clearFeed());
-      (async () => {
-        if (loadingRef.current) return;
-        
-        loadingRef.current = true;
-        setLoading(true);
-        setError("");
-        
-        try {
-          const response = await fetchFeed(1, 10, { 
-            search: filters.search, 
-            genre: filters.genre, 
-            book: filters.book, 
-            sort: filters.sort 
-          });
-          const data = response?.data || response || [];
-          dispatch(addFeed(Array.isArray(data) ? data : []));
-        } catch (err) {
-          setError(err?.response?.data?.message || "Failed to load feed");
-          console.error("Feed error:", err);
-        } finally {
-          setLoading(false);
-          loadingRef.current = false;
-        }
-      })();
+      loadFeed(1, filters.search, filters.genre, filters.book, filters.sort);
     }
-  }, [filters.search, filters.genre, filters.book, filters.sort, dispatch]);
+  }, [filters.search, filters.genre, filters.book, filters.sort, dispatch, loadFeed]);
 
   // Auto-load next page when feed is low
   useEffect(() => {
     if (feed && feed.length > 0 && feed.length <= 2 && !loading) {
+      console.log("Feed running low, loading next page");
       loadFeed(filters.page + 1, filters.search, filters.genre, filters.book, filters.sort);
       setFilters(prev => ({ ...prev, page: prev.page + 1 }));
     }
-  }, [feed, loading]);
+  }, [feed, loading, filters, loadFeed]);
 
   // Update URL params
   useEffect(() => {
