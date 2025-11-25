@@ -18,18 +18,15 @@ const Footer = () => {
       { name: 'Requests', href: '/requests' },
     ],
     resources: [
-      { name: 'Help Center', href: '#help' },
-      { name: 'Community', href: '#community' },
-      { name: 'Book Clubs', href: '#clubs' },
-      { name: 'Reading Lists', href: '#lists' },
+      { name: 'Community', href: 'https://bookclubs.com' },
+      { name: 'Book Clubs', href: 'https://bookclubs.com' },
+      { name: 'Reading Lists', href: 'https://www.goodreads.com' },
     ],
   };
 
   const socialLinks = [
-    { icon: Twitter, label: 'Twitter', href: '#' },
-    { icon: Github, label: 'GitHub', href: '#' },
-    { icon: MessageCircle, label: 'Discord', href: '#' },
-    { icon: Linkedin, label: 'LinkedIn', href: '#' },
+    { icon: Github, label: 'GitHub', href: 'https://github.com/mayank-pillai-99' },
+    { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/mayank-pillai-56798a30b/' },
   ];
 
   const bottomLinks = [
