@@ -11,7 +11,7 @@ const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [filters, setFilters] = useState({
@@ -28,11 +28,11 @@ const Feed = () => {
   // Load feed function
   const loadFeed = useCallback(async (page, search, genre, book, sort) => {
     if (loadingRef.current) return;
-    
+
     loadingRef.current = true;
     setLoading(true);
     setError("");
-    
+
     try {
       const response = await fetchFeed(page, 10, { search, genre, book, sort });
       const data = response?.data || response || [];
@@ -54,7 +54,7 @@ const Feed = () => {
   // Reload when filters change
   useEffect(() => {
     const filterKey = `${filters.search}|${filters.genre}|${filters.book}|${filters.sort}`;
-    
+
     if (filterKey !== prevFilterKeyRef.current) {
       prevFilterKeyRef.current = filterKey;
       dispatch(clearFeed());
@@ -101,14 +101,6 @@ const Feed = () => {
     });
   };
 
-  if (loading && (!feed || feed.length === 0)) {
-    return (
-      <div className="flex justify-center items-center my-20">
-        <PulsatingDots />
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <FeedFilters
@@ -123,7 +115,11 @@ const Feed = () => {
         </div>
       )}
 
-      {feed && feed.length > 0 ? (
+      {loading && (!feed || feed.length === 0) ? (
+        <div className="flex justify-center items-center my-20">
+          <PulsatingDots />
+        </div>
+      ) : feed && feed.length > 0 ? (
         <div className="flex justify-center">
           <UserCard key={feed[0]._id} user={feed[0]} showActions={true} />
         </div>
