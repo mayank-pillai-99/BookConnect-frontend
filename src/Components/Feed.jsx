@@ -22,27 +22,43 @@ const Feed = () => {
     page: 1
   });
 
+  const abortControllerRef = useRef(null);
   const loadingRef = useRef(false);
   const prevFilterKeyRef = useRef(null);
 
   // Load feed function
   const loadFeed = useCallback(async (page, search, genre, book, sort) => {
-    if (loadingRef.current) return;
+    // Cancel previous request if it exists
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    // Create new controller for this request
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
 
     loadingRef.current = true;
     setLoading(true);
     setError("");
 
     try {
-      const response = await fetchFeed(page, 10, { search, genre, book, sort });
+      const response = await fetchFeed(page, 10, { search, genre, book, sort }, { signal: controller.signal });
       const data = response?.data || response || [];
       dispatch(addFeed(Array.isArray(data) ? data : []));
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log("Request cancelled:", err.message);
+        return;
+      }
       setError(err?.response?.data?.message || "Failed to load feed");
       console.error("Feed error:", err);
     } finally {
-      setLoading(false);
-      loadingRef.current = false;
+      // Only set loading to false if this is the current request
+      if (abortControllerRef.current === controller) {
+        setLoading(false);
+        loadingRef.current = false;
+        abortControllerRef.current = null;
+      }
     }
   }, [dispatch]);
 

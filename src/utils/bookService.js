@@ -4,7 +4,7 @@ import { BASE_URL } from './constants';
 // Add book to favorites
 export const addFavoriteBook = async (title, author) => {
   const response = await axios.post(
-    BASE_URL + '/profile/books/add', 
+    BASE_URL + '/profile/books/add',
     { title, author },
     { withCredentials: true }
   );
@@ -34,7 +34,7 @@ export const updateFavoriteGenres = async (genres) => {
 };
 
 // Get feed with filters
-export const getFeed = async (page = 1, limit = 10, filters = {}) => {
+export const getFeed = async (page = 1, limit = 10, filters = {}, options = {}) => {
   const params = new URLSearchParams({
     page: page.toString(),
     limit: limit.toString(),
@@ -48,7 +48,10 @@ export const getFeed = async (page = 1, limit = 10, filters = {}) => {
 
   const response = await axios.get(
     BASE_URL + `/feed?${params.toString()}`,
-    { withCredentials: true }
+    {
+      withCredentials: true,
+      signal: options.signal
+    }
   );
   return response.data;
 };
