@@ -3,276 +3,286 @@ import { BookOpen, Users, MessageCircle, Sparkles, Heart, TrendingUp, ArrowRight
 import { Link, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Landing = () => {
-  const user = useSelector((store) => store.user);
-
-  // If user is logged in, redirect to feed
-  if (user) {
-    return <Navigate to="/feed" replace />;
-  }
-  const features = [
-    {
-      icon: Users,
-      title: "Find Your Reading Tribe",
-      description: "Connect with book lovers who share your literary tastes and discover new reading buddies.",
-    },
-    {
-      icon: BookOpen,
-      title: "Share Your Library",
-      description: "Showcase your favorite books and genres. Let others discover what makes you unique.",
-    },
-    {
-      icon: MessageCircle,
-      title: "Chat & Discuss",
-      description: "Real-time messaging to discuss plot twists, share recommendations, and plan book clubs.",
-    },
-    {
-      icon: Sparkles,
-      title: "Smart Matching",
-      description: "Our algorithm connects you with readers who love the same genres and authors.",
-    },
-    {
-      icon: Heart,
-      title: "Build Connections",
-      description: "Send and receive connection requests. Grow your network of fellow bibliophiles.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Discover Trends",
-      description: "See what books are popular in your network and explore new genres together.",
-    },
-  ];
-
-  const howItWorks = [
-    {
-      step: "1",
-      title: "Create Your Profile",
-      description: "Sign up and add your favorite books and genres to your profile.",
-    },
-    {
-      step: "2",
-      title: "Discover Readers",
-      description: "Browse through profiles and find people with similar reading interests.",
-    },
-    {
-      step: "3",
-      title: "Connect & Chat",
-      description: "Send connection requests and start conversations about your favorite books.",
-    },
-  ];
-
-  return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 px-4">
-        {/* Blurred Photo Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Background Image */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: "url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000&auto=format&fit=crop')",
-              filter: "blur(8px)",
-              transform: "scale(1.1)",
+// ElegantShape Component (Adapted from snippet)
+function ElegantShape({
+    className,
+    delay = 0,
+    width = 400,
+    height = 100,
+    rotate = 0,
+    gradient = "from-white/[0.08]",
+}) {
+    return (
+        <motion.div
+            initial={{
+                opacity: 0,
+                y: -150,
+                rotate: rotate - 15,
             }}
-          ></div>
-          {/* Dark Overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-base-300/90 via-base-300/85 to-base-300/90"></div>
-          {/* Additional gradient for depth */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-base-300/50"></div>
-        </div>
-        
-        <div className="max-w-6xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
+            animate={{
+                opacity: 1,
+                y: 0,
+                rotate: rotate,
+            }}
+            transition={{
+                duration: 2.4,
+                delay,
+                ease: [0.23, 0.86, 0.39, 0.96],
+                opacity: { duration: 1.2 },
+            }}
+            className={`absolute ${className}`}
+        >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-              className="inline-block mb-6"
-            >
-              <div className="p-4 bg-primary/20 rounded-full">
-                <BookOpen className="h-16 w-16 text-primary" />
-              </div>
-            </motion.div>
-
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-              BookConnect
-            </h1>
-            
-            <p className="text-2xl md:text-3xl font-semibold mb-4 text-base-content">
-              Where Book Lovers Meet
-            </p>
-            
-            <p className="text-lg md:text-xl text-base-content/70 mb-8 max-w-2xl mx-auto">
-              Connect with fellow readers, share your favorite books, and discover your next great read through meaningful conversations.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link to="/login" state={{ isSignup: true }}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="btn btn-primary btn-lg gap-2 shadow-xl"
-                >
-                  Get Started Free
-                  <ArrowRight className="h-5 w-5" />
-                </motion.button>
-              </Link>
-              <Link to="/login" state={{ isSignup: false }}>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="btn btn-outline btn-lg"
-                >
-                  Sign In
-                </motion.button>
-              </Link>
-            </div>
-
-            <p className="text-sm text-base-content/50 mt-6">
-              Join thousands of book lovers already connecting
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 px-4 bg-base-200/50">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Everything You Need to Connect
-            </h2>
-            <p className="text-lg text-base-content/70">
-              Powerful features designed for book lovers
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="bg-base-200/80 backdrop-blur-md rounded-2xl p-6 border border-primary/20 hover:border-primary/40 transition-all duration-300 shadow-lg"
-                >
-                  <div className="p-3 bg-primary/10 rounded-xl w-fit mb-4">
-                    <Icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className="text-base-content/70">{feature.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-base-content/70">
-              Get started in three simple steps
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {howItWorks.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                animate={{
+                    y: [0, 15, 0],
+                }}
+                transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                }}
+                style={{
+                    width,
+                    height,
+                }}
                 className="relative"
-              >
-                <div className="bg-base-200/80 backdrop-blur-md rounded-2xl p-8 border border-primary/20 text-center h-full">
-                  <div className="w-16 h-16 bg-primary text-primary-content rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                    {item.step}
-                  </div>
-                  <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                  <p className="text-base-content/70">{item.description}</p>
-                </div>
-                {index < howItWorks.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-8 transform -translate-y-1/2">
-                    <ArrowRight className="h-8 w-8 text-primary/30" />
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+            >
+                <div
+                    className={`absolute inset-0 rounded-full bg-gradient-to-r to-transparent ${gradient} border-2 border-white/10 backdrop-blur-[2px] shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] after:absolute after:inset-0 after:rounded-full after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]`}
+                />
+            </motion.div>
+        </motion.div>
+    );
+}
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ready to Find Your Reading Community?
-            </h2>
-            <p className="text-xl text-base-content/70 mb-8">
-              Join BookConnect today and start connecting with book lovers around the world.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <div className="flex items-center gap-2 text-base-content/80">
-                <Check className="h-5 w-5 text-success" />
-                <span>Free to join</span>
-              </div>
-              <div className="flex items-center gap-2 text-base-content/80">
-                <Check className="h-5 w-5 text-success" />
-                <span>No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2 text-base-content/80">
-                <Check className="h-5 w-5 text-success" />
-                <span>Connect instantly</span>
-              </div>
+const Landing = () => {
+    const user = useSelector((store) => store.user);
+
+    if (user) {
+        return <Navigate to="/feed" replace />;
+    }
+
+    const fadeUpVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: (i) => ({
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 1,
+                delay: 0.5 + i * 0.2,
+                ease: [0.25, 0.4, 0.25, 1],
+            },
+        }),
+    };
+
+    const features = [
+        {
+            icon: Users,
+            title: "Find Your Reading Tribe",
+            description: "Connect with book lovers who share your literary tastes and discover new reading buddies.",
+        },
+        {
+            icon: BookOpen,
+            title: "Share Your Library",
+            description: "Showcase your favorite books and genres. Let others discover what makes you unique.",
+        },
+        {
+            icon: MessageCircle,
+            title: "Chat & Discuss",
+            description: "Real-time messaging to discuss plot twists, share recommendations, and plan book clubs.",
+        },
+        {
+            icon: Sparkles,
+            title: "Smart Matching",
+            description: "Our algorithm connects you with readers who love the same genres and authors.",
+        },
+        {
+            icon: Heart,
+            title: "Build Connections",
+            description: "Send and receive connection requests. Grow your network of fellow bibliophiles.",
+        },
+        {
+            icon: TrendingUp,
+            title: "Discover Trends",
+            description: "See what books are popular in your network and explore new genres together.",
+        },
+    ];
+
+    return (
+        <div className="min-h-screen bg-base-100 overflow-x-hidden font-sans">
+            {/* Geometric Hero Section */}
+            <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-base-100">
+                {/* Background Gradients */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 blur-3xl opacity-30" />
+
+                {/* Floating Shapes */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <ElegantShape
+                        delay={0.3}
+                        width={600}
+                        height={140}
+                        rotate={12}
+                        gradient="from-primary/40"
+                        className="top-[15%] left-[-10%] md:top-[20%] md:left-[-5%]"
+                    />
+
+                    <ElegantShape
+                        delay={0.5}
+                        width={500}
+                        height={120}
+                        rotate={-15}
+                        gradient="from-secondary/40"
+                        className="top-[70%] right-[-5%] md:top-[75%] md:right-[0%]"
+                    />
+
+                    <ElegantShape
+                        delay={0.4}
+                        width={300}
+                        height={80}
+                        rotate={-8}
+                        gradient="from-accent/40"
+                        className="bottom-[5%] left-[5%] md:bottom-[10%] md:left-[10%]"
+                    />
+
+                    <ElegantShape
+                        delay={0.6}
+                        width={200}
+                        height={60}
+                        rotate={20}
+                        gradient="from-warning/40"
+                        className="top-[10%] right-[15%] md:top-[15%] md:right-[20%]"
+                    />
+
+                    <ElegantShape
+                        delay={0.7}
+                        width={150}
+                        height={40}
+                        rotate={-25}
+                        gradient="from-info/40"
+                        className="top-[5%] left-[20%] md:top-[10%] md:left-[25%]"
+                    />
+                </div>
+
+                {/* Hero Content */}
+                <div className="relative z-10 container mx-auto max-w-6xl px-4 md:px-6">
+                    <div className="mx-auto max-w-3xl text-center">
+                        {/* Badge */}
+                        <motion.div
+                            custom={0}
+                            variants={fadeUpVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-base-200/50 border border-base-content/10 backdrop-blur-md mb-8 md:mb-12 shadow-sm"
+                        >
+                            <BookOpen className="h-5 w-5 text-primary" />
+                            <span className="text-sm font-medium tracking-wide text-base-content/80">
+                                The #1 Social Network for Readers
+                            </span>
+                        </motion.div>
+
+                        {/* Title */}
+                        <motion.div
+                            custom={1}
+                            variants={fadeUpVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <h1 className="mx-4 mb-6 text-4xl font-bold tracking-tight sm:text-6xl md:mb-8 md:text-8xl">
+                                <span className="bg-gradient-to-b from-base-content to-base-content/70 bg-clip-text text-transparent">
+                                    Connect Through
+                                </span>
+                                <br />
+                                <span
+                                    className="bg-gradient-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent font-bold pb-4"
+                                    style={{ fontFamily: "'Pacifico', cursive" }}
+                                >
+                                    Books
+                                </span>
+                            </h1>
+                        </motion.div>
+
+                        {/* Description */}
+                        <motion.div
+                            custom={2}
+                            variants={fadeUpVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <p className="mx-auto mb-10 max-w-xl px-4 text-base leading-relaxed sm:text-lg md:text-xl text-base-content/60">
+                                Discover your next favorite story, share your library, and build lasting connections with a community that loves reading as much as you do.
+                            </p>
+                        </motion.div>
+
+                        {/* Buttons */}
+                        <motion.div
+                            custom={3}
+                            variants={fadeUpVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="flex flex-col justify-center gap-4 sm:flex-row"
+                        >
+                            <Link to="/login" state={{ isSignup: true }}>
+                                <button className="btn btn-primary btn-lg rounded-full px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300">
+                                    Get Started
+                                    <ArrowRight className="ml-2 h-5 w-5" />
+                                </button>
+                            </Link>
+                            <Link to="/login" state={{ isSignup: false }}>
+                                <button className="btn btn-outline btn-lg rounded-full px-8 border-base-content/20 hover:bg-base-content/5">
+                                    Sign In
+                                </button>
+                            </Link>
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Bottom Fade */}
+                <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            <Link to="/login" state={{ isSignup: true }}>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="btn btn-primary btn-lg gap-2 shadow-xl"
-              >
-                Start Connecting Now
-                <ArrowRight className="h-5 w-5" />
-              </motion.button>
-            </Link>
-          </motion.div>
+            {/* Features Section (Kept simple to match new aesthetic) */}
+            <section className="py-24 px-4 bg-base-200/30">
+                <div className="max-w-6xl mx-auto">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-16"
+                    >
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                            Everything You Need
+                        </h2>
+                        <p className="text-lg text-base-content/60">
+                            Powerful features designed for the modern reader
+                        </p>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {features.map((feature, index) => {
+                            const Icon = feature.icon;
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    whileHover={{ y: -5 }}
+                                    className="bg-base-100/50 backdrop-blur-sm rounded-3xl p-8 border border-base-content/5 hover:border-primary/20 transition-all duration-300 shadow-sm hover:shadow-xl"
+                                >
+                                    <div className="p-3 bg-primary/10 rounded-2xl w-fit mb-6">
+                                        <Icon className="h-6 w-6 text-primary" />
+                                    </div>
+                                    <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                                    <p className="text-base-content/60 leading-relaxed">{feature.description}</p>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 };
 
 export default Landing;
