@@ -45,7 +45,13 @@ const Connections = () => {
     return matchesSearch && matchesGenre;
   }) || [];
 
-  if (!connections) return null;
+  if (!connections) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <PulsatingDots />
+      </div>
+    );
+  }
 
   if (connections.length === 0) {
     return (
