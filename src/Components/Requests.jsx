@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../utils/requestSlice";
+import PulsatingDots from "./PulsatingDots";
 
 const Requests = () => {
   const requests = useSelector((store) => store.requests);
@@ -45,7 +46,13 @@ const Requests = () => {
     fetchRequests();
   }, []);
 
-  if (!requests) return null;
+  if (!requests) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <PulsatingDots />
+      </div>
+    );
+  }
 
   if (requests.length === 0) {
     return (
@@ -110,13 +117,13 @@ const Requests = () => {
       <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {requests.map((request, index) => {
-            const { 
-              _id, 
-              firstName, 
-              lastName, 
-              photoUrl, 
-              age, 
-              gender, 
+            const {
+              _id,
+              firstName,
+              lastName,
+              photoUrl,
+              age,
+              gender,
               about,
               favoriteBooks = [],
               favoriteGenres = []
@@ -136,12 +143,12 @@ const Requests = () => {
                 <div className="bg-base-200/80 backdrop-blur-md rounded-2xl shadow-xl border border-primary/20 overflow-hidden hover:shadow-2xl hover:border-primary/40 transition-all duration-300">
                   {/* Animated gradient border */}
                   <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
-                  
+
                   <div className="p-6">
                     <div className="flex flex-col lg:flex-row gap-6">
                       {/* Profile Section */}
                       <div className="flex gap-4 flex-1">
-                        <motion.div 
+                        <motion.div
                           className="avatar"
                           whileHover={{ scale: 1.1, rotate: 5 }}
                           transition={{ type: "spring", stiffness: 300 }}
@@ -170,14 +177,14 @@ const Requests = () => {
                               </motion.div>
                             )}
                           </div>
-                          
+
                           {age && gender && (
                             <p className="text-sm text-base-content/70 mb-2 flex items-center gap-1">
                               <UserCheck className="h-3 w-3" />
                               {age}, {gender}
                             </p>
                           )}
-                          
+
                           {about && (
                             <p className="text-base-content/80 mb-4">{about}</p>
                           )}

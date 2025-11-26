@@ -6,13 +6,14 @@ import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/conectionSlice";
 import { Link } from "react-router-dom";
+import PulsatingDots from "./PulsatingDots";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [filterGenre, setFilterGenre] = useState("");
-  
+
   const fetchConnections = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/connections", {
@@ -35,12 +36,12 @@ const Connections = () => {
 
   // Filter connections based on search and genre
   const filteredConnections = connections?.filter(connection => {
-    const matchesSearch = searchQuery === "" || 
+    const matchesSearch = searchQuery === "" ||
       `${connection.firstName} ${connection.lastName}`.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    const matchesGenre = filterGenre === "" || 
+
+    const matchesGenre = filterGenre === "" ||
       connection.favoriteGenres?.includes(filterGenre);
-    
+
     return matchesSearch && matchesGenre;
   }) || [];
 
@@ -163,13 +164,13 @@ const Connections = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredConnections.map((connection, index) => {
-              const { 
-                _id, 
-                firstName, 
-                lastName, 
-                photoUrl, 
-                age, 
-                gender, 
+              const {
+                _id,
+                firstName,
+                lastName,
+                photoUrl,
+                age,
+                gender,
                 about,
                 favoriteBooks = [],
                 favoriteGenres = []
@@ -187,11 +188,11 @@ const Connections = () => {
                   <div className="bg-base-200/80 backdrop-blur-md rounded-2xl shadow-xl border border-primary/20 overflow-hidden hover:shadow-2xl hover:border-primary/40 transition-all duration-300 h-full">
                     {/* Animated gradient border */}
                     <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
-                    
+
                     <div className="p-6">
                       {/* Profile Section */}
                       <div className="flex gap-4 mb-4">
-                        <motion.div 
+                        <motion.div
                           className="avatar"
                           whileHover={{ scale: 1.1, rotate: 5 }}
                           transition={{ type: "spring", stiffness: 300 }}
