@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, easeInOut } from 'framer-motion';
 import { Menu, X, ArrowRight, BookOpen, User, Users, Mail, LogOut } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
@@ -36,14 +36,14 @@ const NavBar = () => {
 
   const navItems = user
     ? [
-        { name: 'Feed', href: '/feed', icon: BookOpen },
-        { name: 'Profile', href: '/profile', icon: User },
-        { name: 'Connections', href: '/connections', icon: Users },
-        { name: 'Requests', href: '/requests', icon: Mail },
-      ]
+      { name: 'Feed', href: '/feed', icon: BookOpen },
+      { name: 'Profile', href: '/profile', icon: User },
+      { name: 'Connections', href: '/connections', icon: Users },
+      { name: 'Requests', href: '/requests', icon: Mail },
+    ]
     : [
-        { name: 'Home', href: '/', icon: BookOpen },
-      ];
+      { name: 'Home', href: '/', icon: BookOpen },
+    ];
 
   const containerVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -87,14 +87,17 @@ const NavBar = () => {
     open: { opacity: 1, x: 0 },
   };
 
+  const location = useLocation();
+
   return (
     <>
       <motion.header
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? 'bg-base-300/80 border-b border-base-content/10 shadow-lg backdrop-blur-md'
+        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'bg-base-300/80 border-b border-base-content/10 shadow-lg backdrop-blur-md'
+          : location.pathname === '/'
+            ? 'bg-transparent'
             : 'bg-base-300'
-        }`}
+          }`}
         variants={containerVariants}
         initial="hidden"
         animate="visible"

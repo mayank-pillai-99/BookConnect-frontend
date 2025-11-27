@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BookOpen, Users, MessageCircle, Sparkles, Heart, TrendingUp, ArrowRight, Check } from "lucide-react";
+import { BookOpen, Users, MessageCircle, Heart, ArrowRight } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -92,19 +92,9 @@ const Landing = () => {
             description: "Real-time messaging to discuss plot twists, share recommendations, and plan book clubs.",
         },
         {
-            icon: Sparkles,
-            title: "Smart Matching",
-            description: "Our algorithm connects you with readers who love the same genres and authors.",
-        },
-        {
             icon: Heart,
             title: "Build Connections",
             description: "Send and receive connection requests. Grow your network of fellow bibliophiles.",
-        },
-        {
-            icon: TrendingUp,
-            title: "Discover Trends",
-            description: "See what books are popular in your network and explore new genres together.",
         },
     ];
 
@@ -240,24 +230,34 @@ const Landing = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            {/* Features Section (Kept simple to match new aesthetic) */}
-            <section className="py-24 px-4 bg-base-200/30">
-                <div className="max-w-6xl mx-auto">
+            {/* Features Section */}
+            <section className="relative py-32 px-4 overflow-hidden">
+                {/* Background Elements */}
+                <div className="absolute inset-0 bg-base-100" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-base-200/20 to-base-100 pointer-events-none" />
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-base-content/10 to-transparent" />
+
+                {/* Decorative Blobs */}
+                <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-x-1/2" />
+                <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl translate-x-1/2" />
+
+                <div className="relative z-10 max-w-7xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-center mb-16"
+                        transition={{ duration: 0.8 }}
+                        className="text-center mb-20"
                     >
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
                             Everything You Need
                         </h2>
-                        <p className="text-lg text-base-content/60">
-                            Powerful features designed for the modern reader
+                        <p className="text-xl text-base-content/60 max-w-2xl mx-auto leading-relaxed">
+                            Powerful features designed to enhance your reading life and help you build meaningful connections.
                         </p>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8">
                         {features.map((feature, index) => {
                             const Icon = feature.icon;
                             return (
@@ -266,15 +266,26 @@ const Landing = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    whileHover={{ y: -5 }}
-                                    className="bg-base-100/50 backdrop-blur-sm rounded-3xl p-8 border border-base-content/5 hover:border-primary/20 transition-all duration-300 shadow-sm hover:shadow-xl"
+                                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                                    className="group relative p-8 rounded-3xl bg-base-200/30 border border-base-content/5 hover:border-primary/20 hover:bg-base-200/50 transition-all duration-500 backdrop-blur-sm overflow-hidden"
                                 >
-                                    <div className="p-3 bg-primary/10 rounded-2xl w-fit mb-6">
-                                        <Icon className="h-6 w-6 text-primary" />
+                                    {/* Hover Gradient */}
+                                    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                                    <div className="relative z-10">
+                                        <div className="mb-6 inline-flex p-4 rounded-2xl bg-base-100 border border-base-content/5 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-300">
+                                            <Icon className="h-8 w-8 text-primary" />
+                                        </div>
+
+                                        <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300">
+                                            {feature.title}
+                                        </h3>
+
+                                        <p className="text-base-content/60 leading-relaxed">
+                                            {feature.description}
+                                        </p>
                                     </div>
-                                    <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                                    <p className="text-base-content/60 leading-relaxed">{feature.description}</p>
                                 </motion.div>
                             );
                         })}

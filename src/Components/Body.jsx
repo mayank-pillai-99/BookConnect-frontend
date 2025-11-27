@@ -41,7 +41,7 @@ const Body = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="pt-20 flex-grow">
+      <div className={`${location.pathname === "/" ? "" : "pt-20"} flex-grow`}>
         <Outlet />
       </div>
       <Footer />
