@@ -3,7 +3,6 @@ import { BookOpen, Users, MessageCircle, Heart, ArrowRight } from "lucide-react"
 import { Link, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-// ElegantShape Component (Adapted from snippet)
 function ElegantShape({
     className,
     delay = 0,

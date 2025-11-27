@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
 
+
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Body = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className={`${location.pathname === "/" ? "" : "pt-20"} flex-grow`}>
+      <div className={`${location.pathname === "/" ? "" : "pt-20"} flex-grow flex flex-col`}>
         <Outlet />
       </div>
       <Footer />

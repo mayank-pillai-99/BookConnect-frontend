@@ -72,7 +72,7 @@ const Chat = () => {
       return;
     }
     const socket = createSocketConnection();
-    
+
     socket.emit("joinChat", {
       firstName: user.firstName,
       userId,
@@ -114,7 +114,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 h-[calc(100vh-8rem)]">
+    <div className="w-[75%] max-w-none mx-auto px-4 py-8 h-[calc(100vh-8rem)]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -193,9 +193,8 @@ const Chat = () => {
                     className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}
                   >
                     <div
-                      className={`max-w-[70%] ${
-                        isOwnMessage ? "items-end" : "items-start"
-                      } flex flex-col gap-1`}
+                      className={`max-w-[70%] ${isOwnMessage ? "items-end" : "items-start"
+                        } flex flex-col gap-1`}
                     >
                       <div className="flex items-center gap-2 px-2">
                         {!isOwnMessage && (
@@ -207,11 +206,10 @@ const Chat = () => {
                       </div>
                       <motion.div
                         whileHover={{ scale: 1.02 }}
-                        className={`px-4 py-3 rounded-2xl ${
-                          isOwnMessage
-                            ? "bg-primary text-primary-content rounded-br-sm"
-                            : "bg-base-300 text-base-content rounded-bl-sm"
-                        } shadow-lg`}
+                        className={`px-4 py-3 rounded-2xl ${isOwnMessage
+                          ? "bg-primary text-primary-content rounded-br-sm"
+                          : "bg-base-300 text-base-content rounded-bl-sm"
+                          } shadow-lg`}
                       >
                         <p className="text-sm break-words">{msg.text}</p>
                       </motion.div>
