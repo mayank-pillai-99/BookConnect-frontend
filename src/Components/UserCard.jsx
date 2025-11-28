@@ -1,24 +1,24 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { X, Heart, BookOpen, Sparkles, MapPin, Calendar ,User} from "lucide-react";
+import { X, Heart, BookOpen, Sparkles, MapPin, Calendar, User } from "lucide-react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user, showActions = false }) => {
-  const { 
-    _id, 
-    firstName, 
-    lastName, 
-    photoUrl, 
-    age, 
-    gender, 
-    about, 
-    favoriteBooks = [], 
-    favoriteGenres = [] 
+  const {
+    _id,
+    firstName,
+    lastName,
+    photoUrl,
+    age,
+    gender,
+    about,
+    favoriteBooks = [],
+    favoriteGenres = []
   } = user;
-  
+
   const dispatch = useDispatch();
   const [exitX, setExitX] = useState(0);
   const [exitOpacity, setExitOpacity] = useState(1);
@@ -45,7 +45,7 @@ const UserCard = ({ user, showActions = false }) => {
       // Swipe threshold reached
       setExitX(info.offset.x > 0 ? 1000 : -1000);
       setExitOpacity(0);
-      
+
       // Send request based on swipe direction
       const status = info.offset.x > 0 ? "interested" : "ignored";
       setTimeout(() => {
@@ -58,7 +58,7 @@ const UserCard = ({ user, showActions = false }) => {
     const direction = status === "interested" ? 1000 : -1000;
     setExitX(direction);
     setExitOpacity(0);
-    
+
     setTimeout(() => {
       handleSendRequest(status, _id);
     }, 300);
@@ -84,7 +84,7 @@ const UserCard = ({ user, showActions = false }) => {
           >
             <X className="inline h-8 w-8" /> NOPE
           </motion.div>
-          
+
           <motion.div
             className="absolute top-8 right-8 z-10 bg-success/90 text-success-content px-6 py-3 rounded-xl font-bold text-2xl rotate-[20deg] border-4 border-success"
             style={{ opacity: useTransform(x, [0, 100], [0, 1]) }}
@@ -98,17 +98,17 @@ const UserCard = ({ user, showActions = false }) => {
       <div className="card bg-base-200/80 backdrop-blur-md shadow-2xl border border-primary/20 overflow-hidden">
         {/* Animated gradient border */}
         <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
-        
+
         {/* Image section */}
         <figure className="relative h-96 overflow-hidden">
-          <img 
-            src={photoUrl} 
+          <img
+            src={photoUrl}
             alt={`${firstName} ${lastName}`}
             className="w-full h-full object-cover"
           />
           {/* Gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-base-300 via-transparent to-transparent" />
-          
+
           {/* Floating badge */}
           {(favoriteBooks.length > 0 || favoriteGenres.length > 0) && (
             <motion.div
@@ -141,7 +141,7 @@ const UserCard = ({ user, showActions = false }) => {
                 </div>
               )}
             </div>
-            
+
             {gender && (
               <p className="text-sm text-base-content/70 flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -149,7 +149,7 @@ const UserCard = ({ user, showActions = false }) => {
               </p>
             )}
           </motion.div>
-          
+
           {/* About */}
           {about && (
             <motion.p
@@ -273,19 +273,6 @@ const UserCard = ({ user, showActions = false }) => {
 
       {/* Custom scrollbar styles */}
       <style jsx>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: var(--fallback-p, oklch(var(--p)));
-          border-radius: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: var(--fallback-pf, oklch(var(--pf)));
-        }
         .animate-energy-flow {
           animation: energy-flow 4s linear infinite;
           background-size: 200% 100%;

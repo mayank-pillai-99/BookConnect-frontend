@@ -114,33 +114,36 @@ const Chat = () => {
   };
 
   return (
-    <div className="w-[75%] max-w-none mx-auto px-4 py-8 h-[calc(100vh-8rem)]">
+    <div className="w-[75%] max-w-none mx-auto px-4 py-8 h-[calc(100vh-8rem)] relative">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 blur-3xl -z-10" />
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-base-200/80 backdrop-blur-md rounded-2xl shadow-xl border border-primary/20 overflow-hidden h-full flex flex-col"
+        className="bg-base-200/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden h-full flex flex-col relative"
       >
         {/* Animated gradient border */}
-        <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent" />
+        <div className="animate-energy-flow via-primary h-1 w-full bg-gradient-to-r from-transparent to-transparent opacity-50" />
 
         {/* Header */}
-        <div className="p-4 border-b border-primary/20 bg-base-300/50">
+        <div className="p-4 border-b border-white/5 bg-base-300/40 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <motion.button
               whileHover={{ scale: 1.1, x: -2 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => navigate("/connections")}
-              className="btn btn-ghost btn-circle btn-sm"
+              className="btn btn-ghost btn-circle btn-sm hover:bg-white/10"
             >
               <ArrowLeft className="h-5 w-5" />
             </motion.button>
 
             <div className="flex items-center gap-3 flex-1">
-              <div className="p-2 bg-primary/10 rounded-lg">
+              <div className="p-2 bg-primary/20 rounded-lg backdrop-blur-sm">
                 <MessageCircle className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-bold">
+                <h2 className="text-xl font-bold text-base-content/90">
                   {targetUser
                     ? `${targetUser.firstName} ${targetUser.lastName}`
                     : "Chat"}
@@ -171,7 +174,7 @@ const Chat = () => {
               className="flex items-center justify-center h-full"
             >
               <div className="text-center">
-                <div className="p-4 bg-base-300/50 rounded-full inline-block mb-4">
+                <div className="p-6 bg-base-100/30 backdrop-blur-sm rounded-full inline-block mb-4 border border-white/5">
                   <MessageCircle className="h-12 w-12 text-base-content/30" />
                 </div>
                 <p className="text-base-content/60 mb-2">No messages yet</p>
@@ -206,12 +209,12 @@ const Chat = () => {
                       </div>
                       <motion.div
                         whileHover={{ scale: 1.02 }}
-                        className={`px-4 py-3 rounded-2xl ${isOwnMessage
-                          ? "bg-primary text-primary-content rounded-br-sm"
-                          : "bg-base-300 text-base-content rounded-bl-sm"
-                          } shadow-lg`}
+                        className={`px-4 py-3 rounded-2xl backdrop-blur-md border shadow-lg ${isOwnMessage
+                            ? "bg-primary/90 text-primary-content rounded-br-sm border-primary/20"
+                            : "bg-base-100/60 text-base-content rounded-bl-sm border-white/10"
+                          }`}
                       >
-                        <p className="text-sm break-words">{msg.text}</p>
+                        <p className="text-sm break-words leading-relaxed">{msg.text}</p>
                       </motion.div>
                     </div>
                   </motion.div>
@@ -223,7 +226,7 @@ const Chat = () => {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-primary/20 bg-base-300/50">
+        <div className="p-4 border-t border-white/5 bg-base-300/40 backdrop-blur-md">
           <div className="flex items-end gap-3">
             <div className="flex-1">
               <motion.textarea
@@ -233,7 +236,7 @@ const Chat = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="textarea textarea-bordered w-full focus:textarea-primary transition-all duration-300 resize-none"
+                className="textarea textarea-bordered w-full bg-base-100/50 focus:bg-base-100/80 focus:textarea-primary transition-all duration-300 resize-none border-white/10 backdrop-blur-sm"
                 rows="1"
                 style={{
                   minHeight: "44px",
@@ -250,13 +253,13 @@ const Chat = () => {
               whileTap={{ scale: 0.95 }}
               onClick={sendMessage}
               disabled={!newMessage.trim()}
-              className="btn btn-primary gap-2"
+              className="btn btn-primary gap-2 shadow-lg shadow-primary/20"
             >
               <Send className="h-4 w-4" />
               Send
             </motion.button>
           </div>
-          <p className="text-xs text-base-content/40 mt-2 text-center">
+          <p className="text-xs text-base-content/40 mt-2 text-center font-medium tracking-wide">
             Press Enter to send, Shift+Enter for new line
           </p>
         </div>
