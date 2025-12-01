@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { removeUser } from '../utils/userSlice';
+import GradientText from './UI/GradientText';
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -121,12 +122,15 @@ const NavBar = () => {
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-base-content text-xl font-bold">
-                    BookConnect
-                  </span>
-                  <span className="text-base-content/60 -mt-1 text-xs">
-                    Connect through books
-                  </span>
+                  <GradientText
+                    colors={["#DB924B", "#794D3C", "#263E3F", "#794D3C", "#DB924B"]}
+                    animationSpeed={8}
+                    showBorder={false}
+                    className="px-1"
+                  >
+                    <span className="text-xl font-bold block leading-tight">BookConnect</span>
+                    <span className="text-[0.6rem] font-bold block leading-tight tracking-wide">Connect Through Books</span>
+                  </GradientText>
                 </div>
               </Link>
             </motion.div>
