@@ -1,5 +1,7 @@
+import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addFeed, clearFeed } from "../utils/feedSlice";
+import axios from "axios";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import UserCard from "./UserCard";

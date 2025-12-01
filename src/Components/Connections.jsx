@@ -14,6 +14,8 @@ const Connections = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterGenre, setFilterGenre] = useState("");
 
+  const [error, setError] = useState("");
+
   const fetchConnections = async () => {
     try {
       const res = await axios.get(BASE_URL + "/user/connections", {
@@ -22,6 +24,9 @@ const Connections = () => {
       dispatch(addConnections(res.data.data));
     } catch (err) {
       console.error(err);
+      setError("Failed to load connections. Please try again later.");
+      // Dispatch empty array to stop loading
+      dispatch(addConnections([]));
     }
   };
 
@@ -36,6 +41,7 @@ const Connections = () => {
 
   // Filter connections based on search and genre
   const filteredConnections = connections?.filter(connection => {
+    if (!connection) return false;
     const matchesSearch = searchQuery === "" ||
       `${connection.firstName} ${connection.lastName}`.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -103,6 +109,23 @@ const Connections = () => {
           {filteredConnections.length} of {connections.length} connection{connections.length !== 1 ? "s" : ""}
         </p>
       </motion.div>
+
+      {/* Error Alert */}
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="alert alert-error mb-6"
+          >
+            <div className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>{error}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Search and Filter */}
       <motion.div

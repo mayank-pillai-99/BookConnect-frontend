@@ -117,6 +117,10 @@ const Requests = () => {
       <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {requests.map((request, index) => {
+            if (!request.fromUserId) {
+              return null;
+            }
+
             const {
               _id,
               firstName,
