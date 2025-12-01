@@ -113,7 +113,10 @@ Book readers often struggle to find like-minded individuals to discuss their fav
 |----------|--------|-------------|
 | `/profile/view` | GET | Get current user profile |
 | `/profile/edit` | PATCH | Update user profile |
-| `/profile/edit/books` | PATCH | Update user's book list |
+| `/profile/genres` | PATCH | Update favorite genres |
+| `/profile/books/add` | POST | Add a book to favorites |
+| `/profile/books/remove` | DELETE | Remove a book from favorites |
+| `/profile/delete` | DELETE | Permanently delete user account |
 
 #### Connection System
 | Endpoint | Method | Description |
@@ -147,6 +150,7 @@ Book readers often struggle to find like-minded individuals to discuss their fav
 - ✅ **Search & Filter** - Find readers by name, books, and genres
 - ✅ **Connection Management** - Send, accept, reject requests
 - ✅ **Profile Customization** - Personalize your reading profile
+- ✅ **Modern UI/UX** - Glassmorphism design with smooth animations
 
 ---
 
@@ -243,6 +247,8 @@ Built with ❤️ by book lovers, for book lovers
 ## 🔗 Links
 
 - **Live Demo**: [https://book-connect-frontend.vercel.app](https://book-connect-frontend.vercel.app)
+- **Backend Repository**: [https://github.com/mayank-pillai-99/BookConnect-backend](https://github.com/mayank-pillai-99/BookConnect-backend)
+- **Frontend Repository**: [https://github.com/mayank-pillai-99/BookConnect-frontend](https://github.com/mayank-pillai-99/BookConnect-frontend)
 
 ---
 
